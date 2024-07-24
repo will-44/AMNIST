@@ -1,0 +1,2 @@
+# AMNIST
+CoRoM courses
