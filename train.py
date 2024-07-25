@@ -50,7 +50,7 @@ for epoch in range(0, 20):
 		
 		# Compute the loss
 		# COMPUTE THE LOSS HERE
-		loss = F.cross_entropy(predicted_label, target_label) + F.cross_entropy(predicted_box, target_box)
+		loss = F.nll_loss(predicted_label, target_label) + F.mse_loss(predicted_box, target_box)
 		# loss = torch.nn.CrossEntropyLoss(predicted_label, target_label) + torch.nn.CrossEntropyLoss(predicted_box, target_box)
 		# Propagate gradient
 		loss.backward()
@@ -84,7 +84,7 @@ for epoch in range(0, 20):
 
 		# Compute the loss
 		# SAME LOSS HERE AS IN TRAINING
-		loss = F.nll_loss(predicted_label, target_label) + F.cross_entropy(predicted_box, target_box)
+		loss = F.nll_loss(predicted_label, target_label) + F.mse_loss(predicted_box, target_box)
 		# Keep track of total loss
 		total += loss.item()
 

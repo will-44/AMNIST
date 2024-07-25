@@ -27,19 +27,19 @@ class Model(nn.Module):
 		self.conv3 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3,3), bias=False)
 
 		# Fourth batch normalization layer
-		self.bn4 = nn.BatchNorm2d(num_features=32)
-		# Fourth convolitional layer
-		self.conv4 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3,3), bias=True)
-
-		# Fifth batch normalization layer
-		self.bn5 = nn.BatchNorm2d(num_features=32)
-		# Fifth convolitional layer
-		self.conv5 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3,3), bias=True)
+		# self.bn4 = nn.BatchNorm2d(num_features=32)
+		# # Fourth convolitional layer
+		# self.conv4 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(6,6), bias=True)
+		#
+		# # Fifth batch normalization layer
+		# self.bn5 = nn.BatchNorm2d(num_features=32)
+		# # Fifth convolitional layer
+		# self.conv5 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3,3), bias=True)
 
 		# Fully connected layer (expressed as a conv layer)
-		self.fc1 = nn.Conv2d(in_channels=32, out_channels=10, kernel_size=(1,1), bias=True)
+		self.fc1 = nn.Conv2d(in_channels=32, out_channels=10, kernel_size=(10,10), bias=True)
 
-		self.fc2 = nn.Conv2d(in_channels=32, out_channels=2, kernel_size=(1,1), bias=True)
+		self.fc2 = nn.Conv2d(in_channels=32, out_channels=2, kernel_size=(10,10), bias=True)
 
 		# Softmax (we use LogSoftMax for stability purpose)
 		self.lsf = nn.LogSoftmax(dim=1)
@@ -63,15 +63,15 @@ class Model(nn.Module):
 
 		# new layer to down to 5
 		# (N,32,10,10) > (N,32,4,4)
-		x = F.max_pool2d(F.relu(self.conv4(self.bn4(x))), (2,2))
-
-		#new layer to down to 1
-		# (N,32,5,5) > (N,32,1,1)
-		x = F.max_pool2d(F.relu(self.conv5(self.bn5(x))), (2,2))
+		# x = F.max_pool2d(F.relu(self.conv4(self.bn4(x))), (2,2))
 
 		# Classification layer (fully connectd + logsoftmax)
 		# (N,32,1,1) > (N,10)
 		c = self.lsf(torch.squeeze(self.fc1(x)))
+
+		#new layer to down to 1
+		# (N,32,5,5) > (N,32,1,1)
+		# x = F.relu(self.conv5(self.bn5(x)))
 
 		# x = self.conv4(x)
 		r = F.relu(torch.squeeze(self.fc2(x)))
